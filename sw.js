@@ -1,7 +1,7 @@
 importScripts("/js/sw-utils.js");
 
-const STATIC_CACHE = "STATIC-V3";
-const DYNAMIC_CACHE = "DYNAMIC-V1";
+const STATIC_CACHE = "STATIC-V4";
+const DYNAMIC_CACHE = "DYNAMIC-V2";
 const IMMUTABLE = "IMMUTABLE-V1";
 
 const appShell = [
@@ -38,7 +38,10 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   const resp = caches.keys().then((keys) => {
     keys.forEach((k) => {
-      if (k !== STATIC_CACHE) {
+      if (k !== STATIC_CACHE && k.includes("STATIC")) {
+        return caches.delete(k);
+      }
+      if (k !== DYNAMIC_CACHE && k.includes("DYNAMIC")) {
         return caches.delete(k);
       }
     });
